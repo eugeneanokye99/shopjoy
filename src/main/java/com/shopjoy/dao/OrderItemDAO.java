@@ -50,7 +50,7 @@ public class OrderItemDAO implements GenericDAO<OrderItem, Integer> {
     public OrderItem save(OrderItem item) throws SQLException {
         if (item == null) return null;
 
-        String sql = "INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, created_at) VALUES (?, ?, ?, ?, ?, ?) RETURNING order_item_id";
+        String sql = "INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal) VALUES (?, ?, ?, ?, ?) RETURNING order_item_id";
 
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -60,7 +60,6 @@ public class OrderItemDAO implements GenericDAO<OrderItem, Integer> {
             ps.setInt(3, item.getQuantity());
             ps.setDouble(4, item.getUnitPrice());
             ps.setDouble(5, item.getSubtotal());
-            ps.setObject(6, item.getCreatedAt());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) item.setOrderItemId(rs.getInt("order_item_id"));

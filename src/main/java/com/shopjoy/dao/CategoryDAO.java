@@ -54,8 +54,8 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
     public Category save(Category category) throws SQLException {
         if (category == null) return null;
 
-        String sql = "INSERT INTO categories (category_name, description, parent_category_id, created_at) " +
-                "VALUES (?, ?, ?, ?) RETURNING category_id";
+        String sql = "INSERT INTO categories (category_name, description, parent_category_id) " +
+                "VALUES (?, ?, ?) RETURNING category_id";
 
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -68,7 +68,6 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
             else
                 ps.setInt(3, category.getParentCategoryId());
 
-            ps.setObject(4, category.getCreatedAt());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) category.setCategoryId(rs.getInt("category_id"));
@@ -82,7 +81,7 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
         if (category == null) return null;
 
         String sql = "UPDATE categories SET category_name = ?, description = ?, parent_category_id = ?, " +
-                "updated_at = CURRENT_TIMESTAMP WHERE category_id = ?";
+                "WHERE category_id = ?";
 
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

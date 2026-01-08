@@ -57,7 +57,7 @@ public class OrderDAO implements GenericDAO<Order, Integer> {
         if (order == null) return null;
 
         String sql = "INSERT INTO orders (user_id, order_date, total_amount, status, shipping_address, " +
-                "payment_method, payment_status, notes, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING order_id";
+                "payment_method, payment_status, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING order_id";
 
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -65,13 +65,11 @@ public class OrderDAO implements GenericDAO<Order, Integer> {
             ps.setInt(1, order.getUserId());
             ps.setObject(2, order.getOrderDate());
             ps.setDouble(3, order.getTotalAmount());
-            ps.setString(4, order.getStatus() != null ? order.getStatus().toString() : null);
+            ps.setString(4, order.getStatus() != null ? order.getStatus().toString().toLowerCase() : null);
             ps.setString(5, order.getShippingAddress());
             ps.setString(6, order.getPaymentMethod());
-            ps.setString(7, order.getPaymentStatus() != null ? order.getPaymentStatus().toString() : null);
+            ps.setString(7, order.getPaymentStatus() != null ? order.getPaymentStatus().toString().toLowerCase() : null);
             ps.setString(8, order.getNotes());
-            ps.setObject(9, order.getCreatedAt());
-            ps.setObject(10, order.getUpdatedAt());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) order.setOrderId(rs.getInt("order_id"));
@@ -84,13 +82,13 @@ public class OrderDAO implements GenericDAO<Order, Integer> {
     public Order update(Order order) throws SQLException {
         if (order == null) return null;
 
-        String sql = "UPDATE orders SET status = ?, payment_status = ?, notes = ?, updated_at = CURRENT_TIMESTAMP WHERE order_id = ?";
+        String sql = "UPDATE orders SET status = ?, payment_status = ?, notes = ? WHERE order_id = ?";
 
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, order.getStatus() != null ? order.getStatus().toString() : null);
-            ps.setString(2, order.getPaymentStatus() != null ? order.getPaymentStatus().toString() : null);
+            ps.setString(1, order.getStatus() != null ? order.getStatus().toString().toLowerCase() : null);
+            ps.setString(2, order.getPaymentStatus() != null ? order.getPaymentStatus().toString().toLowerCase() : null);
             ps.setString(3, order.getNotes());
             ps.setInt(4, order.getOrderId());
             ps.executeUpdate();
@@ -203,7 +201,7 @@ public class OrderDAO implements GenericDAO<Order, Integer> {
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, PaymentStatus.PAID.toString());
+            ps.setString(1, PaymentStatus.PAID.toString().toLowerCase());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     double val = rs.getDouble("total");
@@ -222,7 +220,7 @@ public class OrderDAO implements GenericDAO<Order, Integer> {
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, PaymentStatus.PAID.toString());
+            ps.setString(1, PaymentStatus.PAID.toString().toLowerCase());
             ps.setObject(2, start);
             ps.setObject(3, end);
 
@@ -244,7 +242,7 @@ public class OrderDAO implements GenericDAO<Order, Integer> {
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, newStatus.toString());
+            ps.setString(1, newStatus.toString().toLowerCase());
             ps.setInt(2, orderId);
             return ps.executeUpdate() > 0;
         }
@@ -258,7 +256,7 @@ public class OrderDAO implements GenericDAO<Order, Integer> {
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, newStatus.toString());
+            ps.setString(1, newStatus.toString().toLowerCase());
             ps.setInt(2, orderId);
             return ps.executeUpdate() > 0;
         }

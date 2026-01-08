@@ -56,8 +56,8 @@ public class ReviewDAO implements GenericDAO<Review, Integer> {
             throw new IllegalArgumentException("rating must be between 1 and 5");
 
         String sql = "INSERT INTO reviews (product_id, user_id, rating, title, comment, " +
-                "is_verified_purchase, helpful_count, created_at, updated_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING review_id";
+                "is_verified_purchase, helpful_count) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING review_id";
 
         try (Connection conn = DbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -69,8 +69,7 @@ public class ReviewDAO implements GenericDAO<Review, Integer> {
             ps.setString(5, review.getComment());
             ps.setBoolean(6, review.isVerifiedPurchase());
             ps.setInt(7, review.getHelpfulCount());
-            ps.setObject(8, review.getCreatedAt());
-            ps.setObject(9, review.getUpdatedAt());
+
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) review.setReviewId(rs.getInt("review_id"));
