@@ -3,7 +3,6 @@ package com.shopjoy.test;
 import com.shopjoy.dao.UserDAO;
 import com.shopjoy.model.User;
 import com.shopjoy.model.UserType;
-import com.shopjoy.util.DatabaseConfig;
 import com.shopjoy.util.DatabaseTestUtil;
 
 import java.sql.SQLException;
@@ -22,7 +21,6 @@ public class UserDAOTest {
         System.out.println("========== TESTING USER DAO ==========");
         UserDAO dao = new UserDAO();
 
-        try {
             DatabaseTestUtil.printTestHeader("Create User");
             testCreateUser(dao);
 
@@ -59,10 +57,6 @@ public class UserDAOTest {
             DatabaseTestUtil.printTestHeader("Count Users");
             testCount(dao);
 
-        } finally {
-            System.out.println("Tests complete. Passed: " + passed + ", Failed: " + failed);
-            DatabaseConfig.getInstance().closeAllConnections();
-        }
     }
 
     private static User createUser(UserDAO dao, String username, String email, String password, String first, String last, UserType type) throws SQLException {

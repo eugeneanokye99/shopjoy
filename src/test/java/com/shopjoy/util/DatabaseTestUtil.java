@@ -44,14 +44,12 @@ public class DatabaseTestUtil {
         };
 
         for (String table : tables) {
-            try (Connection conn = DatabaseConfig.getInstance().getConnection();
+            try (Connection conn = DbConfig.getConnection();
                  PreparedStatement ps = conn.prepareStatement("DELETE FROM " + table)) {
                 int affected = ps.executeUpdate();
                 System.out.println("Cleared table " + table + ", rows deleted: " + affected);
             } catch (SQLException e) {
                 System.err.println("clearAllTables: failed to clear " + table + ": " + e.getMessage());
-            } finally {
-                // release handled in DAO/DatabaseConfig if needed
             }
         }
     }
