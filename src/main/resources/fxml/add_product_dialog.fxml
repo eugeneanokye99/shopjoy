@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+
+<VBox spacing="15" minWidth="600" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+       fx:controller="com.shopjoy.controller.AddProductDialogController"
+       stylesheets="@../css/styles.css"
+       style="-fx-padding: 30; -fx-background-color: white;">
+
+    <!-- Title -->
+    <Label text="Add New Product" styleClass="dialog-title"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1976D2;"/>
+
+    <!-- Form Content -->
+    <!-- Form Content -->
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+        <content>
+            <GridPane hgap="10" vgap="15" style="-fx-background-color: white;">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="120" prefWidth="120"/>
+                    <ColumnConstraints minWidth="150" prefWidth="200" hgrow="ALWAYS"/>
+                    <ColumnConstraints minWidth="100" prefWidth="100"/>
+                    <ColumnConstraints minWidth="150" prefWidth="150" hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <!-- Row 0: Product Name -->
+                <Label text="Product Name:*" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="productNameField" promptText="Enter product name"
+                          GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="3"
+                          style="-fx-pref-height: 35px;"/>
+
+                <!-- Row 1: Category -->
+                <Label text="Category:*" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                       style="-fx-font-weight: bold;"/>
+                <ComboBox fx:id="categoryComboBox" promptText="Select category"
+                         GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="3"
+                         maxWidth="Infinity" style="-fx-pref-height: 35px;"/>
+
+                <!-- Row 2: SKU -->
+                <Label text="SKU:*" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="skuField" promptText="Enter SKU"
+                          GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.columnSpan="3"
+                          style="-fx-pref-height: 35px;"/>
+
+                <!-- Row 3: Brand -->
+                <Label text="Brand:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="brandField" promptText="Enter brand name"
+                          GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3"
+                          style="-fx-pref-height: 35px;"/>
+
+                <!-- Row 4: Price and Cost Price -->
+                <Label text="Price:*" GridPane.columnIndex="0" GridPane.rowIndex="4"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="priceField" promptText="0.00"
+                          GridPane.columnIndex="1" GridPane.rowIndex="4"
+                          style="-fx-pref-height: 35px;"/>
+                
+                <Label text="Cost Price:" GridPane.columnIndex="2" GridPane.rowIndex="4"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="costPriceField" promptText="0.00"
+                          GridPane.columnIndex="3" GridPane.rowIndex="4"
+                          style="-fx-pref-height: 35px;"/>
+
+                <!-- Row 5: Initial Stock and Reorder Level -->
+                <Label text="Initial Stock:*" GridPane.columnIndex="0" GridPane.rowIndex="5"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="initialStockField" promptText="Enter quantity"
+                          GridPane.columnIndex="1" GridPane.rowIndex="5"
+                          style="-fx-pref-height: 35px;"/>
+                
+                <Label text="Reorder Level:" GridPane.columnIndex="2" GridPane.rowIndex="5"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="reorderLevelField" promptText="10"
+                          GridPane.columnIndex="3" GridPane.rowIndex="5"
+                          style="-fx-pref-height: 35px;"/>
+
+                <!-- Row 6: Warehouse -->
+                <Label text="Warehouse:" GridPane.columnIndex="0" GridPane.rowIndex="6"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="warehouseField" promptText="Warehouse location"
+                          GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.columnSpan="3"
+                          style="-fx-pref-height: 35px;"/>
+
+                <!-- Row 7: Image URL -->
+                <Label text="Image URL:" GridPane.columnIndex="0" GridPane.rowIndex="7"
+                       style="-fx-font-weight: bold;"/>
+                <TextField fx:id="imageUrlField" promptText="Enter image URL"
+                          GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="3"
+                          style="-fx-pref-height: 35px;"/>
+
+                <!-- Row 8: Description -->
+                <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="8"
+                       style="-fx-font-weight: bold;" GridPane.valignment="TOP">
+                    <padding>
+                        <Insets top="5"/>
+                    </padding>
+                </Label>
+                <TextArea fx:id="descriptionArea" promptText="Enter product description" prefRowCount="3"
+                         GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.columnSpan="3"
+                         wrapText="true"/>
+
+                <!-- Row 9: Active Checkbox -->
+                <CheckBox fx:id="isActiveCheckBox" text="Active Product" selected="true"
+                         GridPane.columnIndex="1" GridPane.rowIndex="9"
+                         style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            </GridPane>
+        </content>
+    </ScrollPane>
+
+    <!-- Message Label -->
+    <Label fx:id="productDialogMessageLabel" styleClass="message-label" wrapText="true"
+           style="-fx-font-size: 14px; -fx-padding: 5 0 0 0;"/>
+
+    <!-- Button Bar -->
+    <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+        <Button fx:id="saveProductButton" text="Save Product" onAction="#handleSaveProduct"
+                styleClass="primary-button"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 30; -fx-cursor: hand;"/>
+        
+        <Button fx:id="cancelProductButton" text="Cancel" onAction="#handleCancel"
+                styleClass="secondary-button"
+                style="-fx-background-color: #757575; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30; -fx-cursor: hand;"/>
+    </HBox>
+
+</VBox>

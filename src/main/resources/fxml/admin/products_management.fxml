@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.shopjoy.controller.ProductsManagementController"
+      stylesheets="@../../css/styles.css"
+      spacing="20"
+      styleClass="content-view">
+    
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+    
+    <!-- Header Section -->
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        
+        <Label text="Product Management" styleClass="page-title"/>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <TextField fx:id="productSearchField" 
+                   promptText="Search products by name or SKU..." 
+                   prefWidth="300"/>
+        
+        <Button fx:id="searchProductButton" 
+                text="🔍 Search" 
+                onAction="#handleSearch" 
+                styleClass="secondary-button"/>
+        
+        <Button fx:id="clearSearchButton" 
+                text="Clear" 
+                onAction="#handleClearSearch" 
+                styleClass="secondary-button"/>
+        
+        <Button fx:id="addProductButton" 
+                text="+ Add Product" 
+                onAction="#handleAddProduct" 
+                styleClass="primary-button"/>
+    </HBox>
+    
+    <!-- Filter Section -->
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        
+        <Label text="Filter by:" styleClass="filter-label"/>
+        
+        <ComboBox fx:id="categoryFilterCombo" 
+                  promptText="All Categories" 
+                  prefWidth="200"/>
+        
+        <ComboBox fx:id="statusFilterCombo" 
+                  promptText="All Status" 
+                  prefWidth="150"/>
+        
+        <Button fx:id="applyFiltersButton" 
+                text="Apply Filters" 
+                onAction="#handleApplyFilters" 
+                styleClass="secondary-button"/>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <Label fx:id="productCountLabel" 
+               text="Showing 0 products" 
+               styleClass="info-label"/>
+    </HBox>
+    
+    <!-- Table Section -->
+    <TableView fx:id="productsTable" prefHeight="500" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="productIdColumn" 
+                        text="ID" 
+                        prefWidth="60" 
+                        resizable="false"/>
+            
+            <TableColumn fx:id="productImageColumn" 
+                        text="Image" 
+                        prefWidth="80" 
+                        resizable="false"/>
+            
+            <TableColumn fx:id="productNameColumn" 
+                        text="Product Name" 
+                        prefWidth="250"/>
+            
+            <TableColumn fx:id="productCategoryColumn" 
+                        text="Category" 
+                        prefWidth="150"/>
+            
+            <TableColumn fx:id="productPriceColumn" 
+                        text="Price" 
+                        prefWidth="100"/>
+            
+            <TableColumn fx:id="productCostColumn" 
+                        text="Cost" 
+                        prefWidth="100"/>
+            
+            <TableColumn fx:id="productStockColumn" 
+                        text="Stock" 
+                        prefWidth="80"/>
+            
+            <TableColumn fx:id="productSkuColumn" 
+                        text="SKU" 
+                        prefWidth="120"/>
+            
+            <TableColumn fx:id="productBrandColumn" 
+                        text="Brand" 
+                        prefWidth="120"/>
+            
+            <TableColumn fx:id="productActiveColumn" 
+                        text="Status" 
+                        prefWidth="80"/>
+            
+            <TableColumn fx:id="productActionsColumn" 
+                        text="Actions" 
+                        prefWidth="200" 
+                        sortable="false"/>
+        </columns>
+    </TableView>
+    
+    <!-- Bottom Section -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        
+        <Button fx:id="refreshButton" 
+                text="🔄 Refresh" 
+                onAction="#handleRefresh" 
+                styleClass="secondary-button"/>
+        
+        <Button fx:id="exportButton" 
+                text="📥 Export CSV" 
+                onAction="#handleExport" 
+                styleClass="secondary-button"/>
+    </HBox>
+    
+</VBox>

@@ -28,7 +28,8 @@ public class InventoryService {
      * Get inventory record for a product.
      */
     public Inventory getInventoryByProductId(int productId) {
-        if (productId <= 0) return null;
+        if (productId <= 0)
+            return null;
         try {
             return inventoryDAO.findByProductId(productId);
         } catch (SQLException e) {
@@ -53,7 +54,8 @@ public class InventoryService {
      * Set stock to an exact quantity. Quantity must be >= 0.
      */
     public synchronized boolean updateStock(int productId, int newQuantity) {
-        if (productId <= 0 || newQuantity < 0) return false;
+        if (productId <= 0 || newQuantity < 0)
+            return false;
         try {
             return inventoryDAO.updateStock(productId, newQuantity);
         } catch (SQLException e) {
@@ -66,10 +68,12 @@ public class InventoryService {
      * Add stock amount (>0) and update last restocked timestamp.
      */
     public synchronized boolean addStock(int productId, int amount) {
-        if (productId <= 0 || amount <= 0) return false;
+        if (productId <= 0 || amount <= 0)
+            return false;
         try {
             boolean ok = inventoryDAO.incrementStock(productId, amount);
-            if (!ok) return false;
+            if (!ok)
+                return false;
             inventoryDAO.updateLastRestocked(productId);
             return true;
         } catch (SQLException e) {
@@ -82,12 +86,15 @@ public class InventoryService {
      * Remove stock amount (>0). Prevents negative stock.
      */
     public synchronized boolean removeStock(int productId, int amount) {
-        if (productId <= 0 || amount <= 0) return false;
+        if (productId <= 0 || amount <= 0)
+            return false;
         try {
             // check availability
             Inventory inv = inventoryDAO.findByProductId(productId);
-            if (inv == null) return false;
-            if (inv.getQuantityInStock() < amount) return false;
+            if (inv == null)
+                return false;
+            if (inv.getQuantityInStock() < amount)
+                return false;
             return inventoryDAO.decrementStock(productId, amount);
         } catch (SQLException e) {
             System.err.println("removeStock: " + e.getMessage());
@@ -99,7 +106,8 @@ public class InventoryService {
      * Returns true if requestedQuantity is available.
      */
     public boolean isStockAvailable(int productId, int requestedQuantity) {
-        if (productId <= 0 || requestedQuantity < 0) return false;
+        if (productId <= 0 || requestedQuantity < 0)
+            return false;
         try {
             return inventoryDAO.checkStockAvailability(productId, requestedQuantity);
         } catch (SQLException e) {
@@ -115,7 +123,8 @@ public class InventoryService {
         List<ProductWithStock> out = new ArrayList<>();
         try {
             List<Inventory> items = inventoryDAO.findLowStockItems();
-            if (items == null) return out;
+            if (items == null)
+                return out;
             for (Inventory inv : items) {
                 Product p = productDAO.findById(inv.getProductId());
                 out.add(new ProductWithStock(p, inv));
@@ -134,7 +143,8 @@ public class InventoryService {
         List<ProductWithStock> out = new ArrayList<>();
         try {
             List<Inventory> items = inventoryDAO.findOutOfStockItems();
-            if (items == null) return out;
+            if (items == null)
+                return out;
             for (Inventory inv : items) {
                 Product p = productDAO.findById(inv.getProductId());
                 out.add(new ProductWithStock(p, inv));
@@ -150,13 +160,16 @@ public class InventoryService {
      * Restock a product by quantity and optionally set warehouse location.
      */
     public synchronized boolean restockProduct(int productId, int quantity, String warehouseLocation) {
-        if (productId <= 0 || quantity <= 0) return false;
+        if (productId <= 0 || quantity <= 0)
+            return false;
         try {
             boolean added = addStock(productId, quantity);
-            if (!added) return false;
+            if (!added)
+                return false;
             if (warehouseLocation != null && !warehouseLocation.trim().isEmpty()) {
                 Inventory inv = inventoryDAO.findByProductId(productId);
-                if (inv == null) return false;
+                if (inv == null)
+                    return false;
                 inv.setWarehouseLocation(warehouseLocation.trim());
                 inventoryDAO.update(inv);
             }
@@ -176,10 +189,12 @@ public class InventoryService {
         double total = 0.0;
         try {
             List<Inventory> items = inventoryDAO.findAll();
-            if (items == null) return 0;
+            if (items == null)
+                return 0;
             for (Inventory inv : items) {
                 Product p = productDAO.findById(inv.getProductId());
-                if (p == null) continue;
+                if (p == null)
+                    continue;
                 total += ((double) inv.getQuantityInStock()) * p.getCostPrice();
             }
             return (int) Math.round(total);
@@ -193,7 +208,8 @@ public class InventoryService {
      * Return inventory records for a warehouse location.
      */
     public List<Inventory> getInventoryByWarehouse(String warehouseLocation) {
-        if (warehouseLocation == null || warehouseLocation.trim().isEmpty()) return new ArrayList<>();
+        if (warehouseLocation == null || warehouseLocation.trim().isEmpty())
+            return new ArrayList<>();
         try {
             return inventoryDAO.findByWarehouse(warehouseLocation.trim());
         } catch (SQLException e) {
@@ -206,15 +222,35 @@ public class InventoryService {
      * Update reorder level for a product's inventory.
      */
     public synchronized boolean updateReorderLevel(int productId, int newReorderLevel) {
-        if (productId <= 0 || newReorderLevel < 0) return false;
+        if (productId <= 0 || newReorderLevel < 0)
+            return false;
         try {
             Inventory inv = inventoryDAO.findByProductId(productId);
-            if (inv == null) return false;
+            if (inv == null)
+                return false;
             inv.setReorderLevel(newReorderLevel);
             inventoryDAO.update(inv);
             return true;
         } catch (SQLException e) {
             System.err.println("updateReorderLevel: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Update warehouse location for a product's inventory.
+     */
+    public synchronized boolean updateWarehouseLocation(int productId, String location) {
+        if (productId <= 0)
+            return false;
+        try {
+            Inventory inv = inventoryDAO.findByProductId(productId);
+            if (inv == null)
+                return false;
+            inv.setWarehouseLocation(location);
+            return inventoryDAO.update(inv) != null;
+        } catch (SQLException e) {
+            System.err.println("updateWarehouseLocation: " + e.getMessage());
             return false;
         }
     }
@@ -232,7 +268,8 @@ public class InventoryService {
             if (all != null) {
                 for (Inventory inv : all) {
                     Product p = productDAO.findById(inv.getProductId());
-                    if (p != null) totalValue += inv.getQuantityInStock() * p.getCostPrice();
+                    if (p != null)
+                        totalValue += inv.getQuantityInStock() * p.getCostPrice();
                 }
             }
             return new InventorySummary(totalProducts, low, out, totalValue);
@@ -246,10 +283,12 @@ public class InventoryService {
      * Returns true if product is at or below reorder level and should alert.
      */
     public boolean checkAndAlertLowStock(int productId) {
-        if (productId <= 0) return false;
+        if (productId <= 0)
+            return false;
         try {
             Inventory inv = inventoryDAO.findByProductId(productId);
-            if (inv == null) return false;
+            if (inv == null)
+                return false;
             return inv.getQuantityInStock() <= inv.getReorderLevel();
         } catch (SQLException e) {
             System.err.println("checkAndAlertLowStock: " + e.getMessage());

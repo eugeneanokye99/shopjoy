@@ -136,22 +136,22 @@ public class ProductService {
         }
     }
 
-    public Product updateProduct(Product product) {
+    public boolean updateProduct(Product product) {
         if (product == null || product.getProductId() <= 0) {
             System.err.println("updateProduct: invalid product");
-            return null;
+            return false;
         }
-        if (!validateProductFields(product)) return null;
+        if (!validateProductFields(product)) return false;
         try {
             Product existing = productDAO.findById(product.getProductId());
             if (existing == null) {
                 System.err.println("updateProduct: product not found");
-                return null;
+                return false;
             }
-            return productDAO.update(product);
+            return productDAO.update(product) != null;
         } catch (SQLException e) {
             System.err.println("updateProduct SQLException: " + e.getMessage());
-            return null;
+            return false;
         }
     }
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:id="adminDashboardRoot"
+            fx:controller="com.shopjoy.controller.AdminDashboardController"
+            stylesheets="@../css/styles.css"
+            prefWidth="1200" prefHeight="800">
+
+    <!-- Top section: Header with title, welcome label, and logout button -->
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="header">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            
+            <Label text="ShopJoy Admin Dashboard" styleClass="dashboard-title"/>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label fx:id="adminWelcomeLabel" text="Welcome, Admin" styleClass="welcome-text"/>
+            
+            <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout" styleClass="secondary-button"/>
+        </HBox>
+    </top>
+
+    <!-- Left section: Navigation sidebar -->
+    <left>
+        <VBox spacing="5" minWidth="220" styleClass="sidebar">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+
+            <Button fx:id="productsNavButton" 
+                    text="📦 Products" 
+                    onAction="#loadProductsView" 
+                    styleClass="nav-button"
+                    maxWidth="Infinity"
+                    alignment="CENTER_LEFT"/>
+            
+            <Button fx:id="categoriesNavButton" 
+                    text="📁 Categories" 
+                    onAction="#loadCategoriesView" 
+                    styleClass="nav-button"
+                    maxWidth="Infinity"
+                    alignment="CENTER_LEFT"/>
+            
+            <Button fx:id="ordersNavButton" 
+                    text="🛒 Orders" 
+                    onAction="#loadOrdersView" 
+                    styleClass="nav-button"
+                    maxWidth="Infinity"
+                    alignment="CENTER_LEFT"/>
+            
+            <Button fx:id="inventoryNavButton" 
+                    text="📊 Inventory" 
+                    onAction="#loadInventoryView" 
+                    styleClass="nav-button"
+                    maxWidth="Infinity"
+                    alignment="CENTER_LEFT"/>
+            
+            <Button fx:id="customersNavButton" 
+                    text="👥 Customers" 
+                    onAction="#loadCustomersView" 
+                    styleClass="nav-button"
+                    maxWidth="Infinity"
+                    alignment="CENTER_LEFT"/>
+            
+            <Button fx:id="reviewsNavButton" 
+                    text="⭐ Reviews" 
+                    onAction="#loadReviewsView" 
+                    styleClass="nav-button"
+                    maxWidth="Infinity"
+                    alignment="CENTER_LEFT"/>
+            
+            <Button fx:id="reportsNavButton" 
+                    text="📈 Reports" 
+                    onAction="#loadReportsView" 
+                    styleClass="nav-button"
+                    maxWidth="Infinity"
+                    alignment="CENTER_LEFT"/>
+        </VBox>
+    </left>
+
+    <!-- Center section: Dynamic content area -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area"/>
+    </center>
+
+</BorderPane>

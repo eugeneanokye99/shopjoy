@@ -17,7 +17,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
 
     @Override
     public User findById(Integer userId) throws SQLException {
-        if (userId == null) return null;
+        if (userId == null)
+            return null;
 
         String sql = """
                 SELECT user_id, username, email, password_hash,
@@ -28,7 +29,7 @@ public class UserDAO implements GenericDAO<User, Integer> {
                 """;
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
 
@@ -51,8 +52,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
                 """;
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 users.add(mapResultSetToUser(rs));
@@ -63,7 +64,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
 
     @Override
     public User save(User user) throws SQLException {
-        if (user == null) return null;
+        if (user == null)
+            return null;
 
         String plain = user.getPasswordHash();
         String hashed = plain != null ? BCrypt.hashpw(plain, BCrypt.gensalt()) : null;
@@ -77,7 +79,7 @@ public class UserDAO implements GenericDAO<User, Integer> {
                 """;
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
@@ -103,7 +105,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
 
     @Override
     public User update(User user) throws SQLException {
-        if (user == null) return null;
+        if (user == null)
+            return null;
 
         String sql = """
                 UPDATE users
@@ -113,7 +116,7 @@ public class UserDAO implements GenericDAO<User, Integer> {
                 """;
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getEmail());
             ps.setString(2, user.getFirstName());
@@ -129,12 +132,13 @@ public class UserDAO implements GenericDAO<User, Integer> {
 
     @Override
     public boolean delete(Integer userId) throws SQLException {
-        if (userId == null) return false;
+        if (userId == null)
+            return false;
 
         String sql = "DELETE FROM users WHERE user_id = ?";
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
             return ps.executeUpdate() > 0;
@@ -146,8 +150,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
         String sql = "SELECT COUNT(*) AS cnt FROM users";
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             return rs.next() ? rs.getLong("cnt") : 0L;
         }
@@ -156,7 +160,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
     // -------- Custom methods --------
 
     public User findByUsername(String username) throws SQLException {
-        if (username == null) return null;
+        if (username == null)
+            return null;
 
         String sql = """
                 SELECT user_id, username, email, password_hash,
@@ -167,7 +172,7 @@ public class UserDAO implements GenericDAO<User, Integer> {
                 """;
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, username);
 
@@ -178,7 +183,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
     }
 
     public User findByEmail(String email) throws SQLException {
-        if (email == null) return null;
+        if (email == null)
+            return null;
 
         String sql = """
                 SELECT user_id, username, email, password_hash,
@@ -189,7 +195,7 @@ public class UserDAO implements GenericDAO<User, Integer> {
                 """;
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
 
@@ -200,21 +206,24 @@ public class UserDAO implements GenericDAO<User, Integer> {
     }
 
     public User authenticate(String username, String password) throws SQLException {
-        if (username == null || password == null) return null;
+        if (username == null || password == null)
+            return null;
 
         User user = findByUsername(username);
-        if (user == null || user.getPasswordHash() == null) return null;
+        if (user == null || user.getPasswordHash() == null)
+            return null;
 
         return BCrypt.checkpw(password, user.getPasswordHash()) ? user : null;
     }
 
     public boolean emailExists(String email) throws SQLException {
-        if (email == null) return false;
+        if (email == null)
+            return false;
 
         String sql = "SELECT COUNT(*) AS cnt FROM users WHERE email = ?";
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
 
@@ -225,12 +234,13 @@ public class UserDAO implements GenericDAO<User, Integer> {
     }
 
     public boolean usernameExists(String username) throws SQLException {
-        if (username == null) return false;
+        if (username == null)
+            return false;
 
         String sql = "SELECT COUNT(*) AS cnt FROM users WHERE username = ?";
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, username);
 
@@ -242,7 +252,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
 
     public List<User> findByUserType(UserType userType) throws SQLException {
         List<User> users = new ArrayList<>();
-        if (userType == null) return users;
+        if (userType == null)
+            return users;
 
         String sql = """
                 SELECT user_id, username, email, password_hash,
@@ -254,9 +265,9 @@ public class UserDAO implements GenericDAO<User, Integer> {
                 """;
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, userType.toString());
+            ps.setString(1, userType.toString().toLowerCase());
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -268,7 +279,8 @@ public class UserDAO implements GenericDAO<User, Integer> {
     }
 
     public boolean changePassword(int userId, String newPassword) throws SQLException {
-        if (newPassword == null) return false;
+        if (newPassword == null)
+            return false;
 
         String hashed = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 
@@ -279,7 +291,7 @@ public class UserDAO implements GenericDAO<User, Integer> {
                 """;
 
         try (Connection conn = DbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, hashed);
             ps.setInt(2, userId);
@@ -304,10 +316,12 @@ public class UserDAO implements GenericDAO<User, Integer> {
         u.setUserType(ut != null ? UserType.fromString(ut) : null);
 
         Timestamp created = rs.getTimestamp("created_at");
-        if (created != null) u.setCreatedAt(created.toLocalDateTime());
+        if (created != null)
+            u.setCreatedAt(created.toLocalDateTime());
 
         Timestamp updated = rs.getTimestamp("updated_at");
-        if (updated != null) u.setUpdatedAt(updated.toLocalDateTime());
+        if (updated != null)
+            u.setUpdatedAt(updated.toLocalDateTime());
 
         return u;
     }

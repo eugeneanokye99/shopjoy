@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20.0" prefWidth="450.0" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.shopjoy.controller.CheckoutDialogController">
+    
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+
+    <Label fx:id="headerLabel" text="Order Summary" styleClass="dialog-title" />
+
+    <GridPane hgap="15.0" vgap="15.0">
+        <Label text="Shipping Address:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="addressField" promptText="Enter shipping address..." prefWidth="250.0" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label text="Payment Method:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="paymentField" promptText="Credit Card, PayPal, etc." prefWidth="250.0" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    </GridPane>
+
+</VBox>

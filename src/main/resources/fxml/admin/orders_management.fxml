@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.shopjoy.controller.OrdersManagementController"
+      spacing="20" 
+      styleClass="content-view"
+      stylesheets="@../../css/styles.css">
+    
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 10;">
+        <Label text="Orders Management" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="statusFilterCombo" promptText="Filter by Status" prefWidth="180"/>
+        <Button fx:id="filterOrdersButton" text="Apply Filter" onAction="#handleFilterOrders" styleClass="secondary-button"/>
+        <Button fx:id="refreshOrdersButton" text="🔄 Refresh" onAction="#handleRefresh" styleClass="secondary-button"/>
+    </HBox>
+
+    <!-- Statistics Section -->
+    <HBox spacing="20" style="-fx-padding: 10;">
+        <VBox styleClass="mini-stat-card">
+            <Label text="Total Orders" styleClass="mini-stat-label"/>
+            <Label fx:id="totalOrdersLabel" text="0" styleClass="mini-stat-value"/>
+        </VBox>
+        <VBox styleClass="mini-stat-card">
+            <Label text="Pending" styleClass="mini-stat-label"/>
+            <Label fx:id="pendingOrdersLabel" text="0" styleClass="mini-stat-value"/>
+        </VBox>
+        <VBox styleClass="mini-stat-card">
+            <Label text="Processing" styleClass="mini-stat-label"/>
+            <Label fx:id="processingOrdersLabel" text="0" styleClass="mini-stat-value"/>
+        </VBox>
+        <VBox styleClass="mini-stat-card">
+            <Label text="Shipped" styleClass="mini-stat-label"/>
+            <Label fx:id="shippedOrdersLabel" text="0" styleClass="mini-stat-value"/>
+        </VBox>
+        <VBox styleClass="mini-stat-card">
+            <Label text="Total Revenue" styleClass="mini-stat-label"/>
+            <Label fx:id="totalRevenueLabel" text="0.00" styleClass="mini-stat-value"/>
+        </VBox>
+    </HBox>
+
+    <!-- Table Section -->
+    <TableView fx:id="ordersTable" prefHeight="450">
+        <columns>
+            <TableColumn fx:id="orderIdColumn" text="Order #" prefWidth="80"/>
+            <TableColumn fx:id="orderUserColumn" text="Customer" prefWidth="150"/>
+            <TableColumn fx:id="orderEmailColumn" text="Email" prefWidth="180"/>
+            <TableColumn fx:id="orderDateColumn" text="Order Date" prefWidth="150"/>
+            <TableColumn fx:id="orderItemsColumn" text="Items" prefWidth="60"/>
+            <TableColumn fx:id="orderTotalColumn" text="Total Amount" prefWidth="120"/>
+            <TableColumn fx:id="orderStatusColumn" text="Status" prefWidth="120"/>
+            <TableColumn fx:id="orderPaymentColumn" text="Payment" prefWidth="100"/>
+            <TableColumn fx:id="orderActionsColumn" text="Actions" prefWidth="250"/>
+        </columns>
+    </TableView>
+
+</VBox>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="customerDashboardRoot" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.shopjoy.controller.CustomerDashboardController"
+            stylesheets="@../css/styles.css,@../css/customer_dashboard.css"
+            styleClass="customer-dashboard-root">
+
+    <!-- Top Section: Header with search and user actions -->
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="customer-header"
+              style="-fx-padding: 15;">
+            <Label text="ShopJoy - Your Shopping Experience" styleClass="customer-dashboard-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Search products..." prefWidth="300"
+                      styleClass="customer-search-field"/>
+            <Button fx:id="searchButton" text="Search" onAction="#handleSearch"
+                    styleClass="customer-search-button"/>
+            <Button fx:id="cartButton" text="🛒 Cart (0)" onAction="#handleViewCart"
+                    styleClass="customer-cart-button"/>
+            <Label fx:id="customerWelcomeLabel" text="Welcome!" styleClass="customer-welcome-label"/>
+            <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout"
+                    styleClass="customer-logout-button"/>
+        </HBox>
+    </top>
+
+    <!-- Left Section: Sidebar Filters and Navigation -->
+    <left>
+        <VBox spacing="10" minWidth="200" styleClass="customer-sidebar"
+              style="-fx-padding: 20;">
+            <Label text="Categories" styleClass="customer-sidebar-title"/>
+            <ListView fx:id="categoriesListView" prefHeight="400" styleClass="customer-categories-list"/>
+
+            <Separator/>
+
+            <Label text="Price Range" styleClass="customer-sidebar-title"/>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Min:" styleClass="customer-price-label"/>
+                <TextField fx:id="minPriceField" prefWidth="80" promptText="0.00" styleClass="customer-price-field"/>
+            </HBox>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Max:" styleClass="customer-price-label"/>
+                <TextField fx:id="maxPriceField" prefWidth="80" promptText="999.99" styleClass="customer-price-field"/>
+            </HBox>
+            <Button fx:id="applyFilterButton" text="Apply Filter" onAction="#handleApplyFilter"
+                    styleClass="customer-filter-button"/>
+
+            <Separator/>
+
+            <Button fx:id="myOrdersButton" text="My Orders" onAction="#handleMyOrders" styleClass="customer-nav-button"/>
+            <Button fx:id="myReviewsButton" text="My Reviews" onAction="#handleMyReviews" styleClass="customer-nav-button"/>
+            <Button fx:id="myProfileButton" text="My Profile" onAction="#handleMyProfile" styleClass="customer-nav-button"/>
+        </VBox>
+    </left>
+
+    <!-- Center Section: Products Grid -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background: transparent;">
+            <content>
+                <FlowPane fx:id="productsFlowPane" hgap="20" vgap="20"
+                          style="-fx-padding: 20;" styleClass="customer-products-flow"/>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

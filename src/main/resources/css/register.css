@@ -1,0 +1,124 @@
+/* Root Styling */
+.register-root {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
+}
+
+/* Header Section */
+.register-header {
+    -fx-background-color: transparent;
+    -fx-padding: 35 40 25 40;
+}
+
+.register-title {
+    -fx-font-size: 38px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0, 0, 4);
+}
+
+.register-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(255,255,255,0.9);
+    -fx-font-weight: 500;
+}
+
+/* Form Container */
+.register-form {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 30, 0, 0, 15);
+    -fx-border-radius: 20;
+    -fx-spacing: 12;
+}
+
+/* Field Labels */
+.register-label {
+    -fx-font-weight: 600;
+    -fx-text-fill: #4a5568;
+    -fx-font-size: 14px;
+    -fx-min-width: 140;
+}
+
+/* Input Fields */
+.register-field {
+    -fx-pref-height: 42;
+    -fx-background-color: #f7fafc;
+    -fx-background-radius: 10;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-padding: 0 15;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2d3748;
+}
+
+.register-field:focused {
+    -fx-border-color: #667eea;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.2), 8, 0, 0, 0);
+}
+
+/* Message Label */
+.register-message {
+    -fx-font-size: 13px;
+    -fx-padding: 10 0;
+    -fx-text-fill: #e53e3e;
+    -fx-font-weight: 600;
+}
+
+/* Action Buttons */
+.register-actions {
+    -fx-padding: 20 0 0 0;
+    -fx-spacing: 15;
+}
+
+.register-create-button {
+    -fx-pref-height: 48;
+    -fx-pref-width: 200;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.4), 15, 0, 0, 5);
+}
+
+.register-create-button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #5568d3 0%, #6a3f8c 100%);
+    -fx-scale-y: 1.05;
+    -fx-scale-x: 1.05;
+}
+
+.register-back-button {
+    -fx-pref-height: 48;
+    -fx-pref-width: 200;
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -fx-text-fill: #667eea;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-border-color: #667eea;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-cursor: hand;
+}
+
+.register-back-button:hover {
+    -fx-background-color: rgba(102,126,234,0.1);
+    -fx-scale-y: 1.05;
+    -fx-scale-x: 1.05;
+}
+
+/* Footer */
+.register-footer {
+    -fx-background-color: transparent;
+    -fx-padding: 20;
+}
+
+.register-footer-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255,255,255,0.8);
+    -fx-font-weight: 500;
+}

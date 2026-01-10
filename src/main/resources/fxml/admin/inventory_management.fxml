@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.shopjoy.controller.InventoryManagementController"
+      spacing="20" 
+      styleClass="content-view"
+      stylesheets="@../../css/styles.css">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <!-- Header Section -->
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+        <Label text="Inventory Management" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="showLowStockButton" text="⚠️ Low Stock" onAction="#handleShowLowStock" styleClass="secondary-button"/>
+        <Button fx:id="showOutOfStockButton" text="❌ Out of Stock" onAction="#handleShowOutOfStock" styleClass="secondary-button"/>
+        <Button fx:id="showAllButton" text="📋 All Items" onAction="#handleShowAll" styleClass="secondary-button"/>
+        <Button fx:id="refreshButton" text="🔄 Refresh" onAction="#handleRefresh" styleClass="secondary-button"/>
+    </HBox>
+
+    <!-- Summary Stats Section -->
+    <HBox spacing="20" style="-fx-padding: 10;">
+        <VBox styleClass="mini-stat-card">
+            <Label text="Total Items" styleClass="mini-stat-label"/>
+            <Label fx:id="totalItemsLabel" text="0" styleClass="mini-stat-value"/>
+        </VBox>
+        <VBox styleClass="mini-stat-card">
+            <Label text="Low Stock" styleClass="mini-stat-label"/>
+            <Label fx:id="lowStockCountLabel" text="0" styleClass="mini-stat-value"/>
+        </VBox>
+        <VBox styleClass="mini-stat-card">
+            <Label text="Out of Stock" styleClass="mini-stat-label"/>
+            <Label fx:id="outOfStockCountLabel" text="0" styleClass="mini-stat-value"/>
+        </VBox>
+        <VBox styleClass="mini-stat-card">
+            <Label text="Inventory Value" styleClass="mini-stat-label"/>
+            <Label fx:id="inventoryValueLabel" text="0" styleClass="mini-stat-value"/>
+        </VBox>
+    </HBox>
+
+    <!-- Table Section -->
+    <TableView fx:id="inventoryTable" prefHeight="500">
+        <columns>
+            <TableColumn fx:id="productIdCol" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="productNameCol" text="Product Name" prefWidth="250"/>
+            <TableColumn fx:id="skuCol" text="SKU" prefWidth="120"/>
+            <TableColumn fx:id="quantityCol" text="Quantity" prefWidth="100"/>
+            <TableColumn fx:id="reorderLevelCol" text="Reorder Level" prefWidth="120"/>
+            <TableColumn fx:id="warehouseCol" text="Warehouse" prefWidth="150"/>
+            <TableColumn fx:id="statusCol" text="Status" prefWidth="120"/>
+            <TableColumn fx:id="actionsCol" text="Actions" prefWidth="180"/>
+        </columns>
+    </TableView>
+
+</VBox>

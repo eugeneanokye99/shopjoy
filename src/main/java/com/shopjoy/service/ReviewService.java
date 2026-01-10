@@ -40,6 +40,18 @@ public class ReviewService {
     }
 
     /**
+     * Get all reviews.
+     */
+    public List<Review> getAllReviews() {
+        try {
+            return reviewDAO.findAll();
+        } catch (SQLException e) {
+            System.err.println("getAllReviews: SQLException: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Add a new review for a product by a user.
      * Returns the saved Review, or null on validation failure or error.
      */
@@ -124,7 +136,8 @@ public class ReviewService {
      * Returns the updated Review or null on failure.
      */
     public Review updateReview(int reviewId, int userId, int rating, String title, String comment) {
-        if (reviewId <= 0 || userId <= 0) return null;
+        if (reviewId <= 0 || userId <= 0)
+            return null;
         if (!isValidRating(rating)) {
             System.err.println("updateReview: rating out of range");
             return null;
@@ -136,8 +149,10 @@ public class ReviewService {
 
         try {
             Review existing = reviewDAO.findById(reviewId);
-            if (existing == null) return null;
-            if (existing.getUserId() != userId) return null; // not owner
+            if (existing == null)
+                return null;
+            if (existing.getUserId() != userId)
+                return null; // not owner
 
             existing.setRating(rating);
             existing.setTitle(title != null ? title.trim() : null);
@@ -160,11 +175,14 @@ public class ReviewService {
      * Delete a review. Only owner or admin may delete.
      */
     public boolean deleteReview(int reviewId, int userId, boolean isAdmin) {
-        if (reviewId <= 0) return false;
+        if (reviewId <= 0)
+            return false;
         try {
             Review r = reviewDAO.findById(reviewId);
-            if (r == null) return false;
-            if (r.getUserId() != userId && !isAdmin) return false;
+            if (r == null)
+                return false;
+            if (r.getUserId() != userId && !isAdmin)
+                return false;
             try {
                 return reviewDAO.delete(reviewId);
             } catch (SQLException e) {
@@ -181,11 +199,14 @@ public class ReviewService {
      * Get reviews for a product, sorted by date descending.
      */
     public List<Review> getProductReviews(int productId) {
-        if (productId <= 0) return new ArrayList<>();
+        if (productId <= 0)
+            return new ArrayList<>();
         try {
             List<Review> list = reviewDAO.findByProductId(productId);
-            if (list == null) return new ArrayList<>();
-            list.sort(Comparator.comparing((Review rv) -> rv.getCreatedAt(), Comparator.nullsLast(Comparator.reverseOrder())));
+            if (list == null)
+                return new ArrayList<>();
+            list.sort(Comparator.comparing((Review rv) -> rv.getCreatedAt(),
+                    Comparator.nullsLast(Comparator.reverseOrder())));
             return list;
         } catch (SQLException e) {
             System.err.println("getProductReviews: SQLException: " + e.getMessage());
@@ -197,7 +218,8 @@ public class ReviewService {
      * Get reviews written by a user.
      */
     public List<Review> getUserReviews(int userId) {
-        if (userId <= 0) return new ArrayList<>();
+        if (userId <= 0)
+            return new ArrayList<>();
         try {
             List<Review> list = reviewDAO.findByUserId(userId);
             return list != null ? list : new ArrayList<>();
@@ -211,7 +233,8 @@ public class ReviewService {
      * Return average rating for a product (0.0 when none).
      */
     public double getAverageRating(int productId) {
-        if (productId <= 0) return 0.0;
+        if (productId <= 0)
+            return 0.0;
         try {
             return reviewDAO.getAverageRating(productId);
         } catch (SQLException e) {
@@ -224,7 +247,8 @@ public class ReviewService {
      * Return total review count for a product.
      */
     public int getReviewCount(int productId) {
-        if (productId <= 0) return 0;
+        if (productId <= 0)
+            return 0;
         try {
             return reviewDAO.getReviewCount(productId);
         } catch (SQLException e) {
@@ -237,7 +261,8 @@ public class ReviewService {
      * Return only verified-purchase reviews for a product.
      */
     public List<Review> getVerifiedReviews(int productId) {
-        if (productId <= 0) return new ArrayList<>();
+        if (productId <= 0)
+            return new ArrayList<>();
         try {
             List<Review> list = reviewDAO.findVerifiedPurchaseReviews(productId);
             return list != null ? list : new ArrayList<>();
@@ -251,7 +276,8 @@ public class ReviewService {
      * Increment helpful count for a review.
      */
     public boolean markReviewHelpful(int reviewId) {
-        if (reviewId <= 0) return false;
+        if (reviewId <= 0)
+            return false;
         try {
             return reviewDAO.incrementHelpfulCount(reviewId);
         } catch (SQLException e) {
@@ -264,14 +290,16 @@ public class ReviewService {
      * Calculate and return rating stats for a product.
      */
     public ProductRatingStats getProductRatingStats(int productId) {
-        if (productId <= 0) return new ProductRatingStats(productId, 0.0, 0, new int[5]);
+        if (productId <= 0)
+            return new ProductRatingStats(productId, 0.0, 0, new int[5]);
         try {
             List<Review> reviews = reviewDAO.findByProductId(productId);
             int total = reviews == null ? 0 : reviews.size();
             int[] dist = new int[5];
             for (Review r : reviews) {
                 int rt = r.getRating();
-                if (rt >= 1 && rt <= 5) dist[rt - 1]++;
+                if (rt >= 1 && rt <= 5)
+                    dist[rt - 1]++;
             }
             double avg = reviewDAO.getAverageRating(productId);
             return new ProductRatingStats(productId, avg, total, dist);
@@ -285,7 +313,8 @@ public class ReviewService {
      * Check if the user has already reviewed the product.
      */
     public boolean hasUserReviewedProduct(int userId, int productId) {
-        if (userId <= 0 || productId <= 0) return false;
+        if (userId <= 0 || productId <= 0)
+            return false;
         try {
             return reviewDAO.userHasReviewed(userId, productId);
         } catch (SQLException e) {
@@ -298,7 +327,8 @@ public class ReviewService {
      * Return recent reviews across all products up to the limit.
      */
     public List<Review> getRecentReviews(int limit) {
-        if (limit <= 0) return new ArrayList<>();
+        if (limit <= 0)
+            return new ArrayList<>();
         try {
             List<Review> list = reviewDAO.findRecentReviews(limit);
             return list != null ? list : new ArrayList<>();
@@ -309,14 +339,17 @@ public class ReviewService {
     }
 
     /**
-     * Return top rated products (productId, avgRating, reviewCount) limited by `limit`.
+     * Return top rated products (productId, avgRating, reviewCount) limited by
+     * `limit`.
      */
     public List<Map<String, Object>> getTopRatedProducts(int limit) {
         List<Map<String, Object>> out = new ArrayList<>();
-        if (limit <= 0) return out;
+        if (limit <= 0)
+            return out;
         try {
             List<Map<String, Object>> rows = reviewDAO.findTopRatedProducts(limit);
-            if (rows == null) return out;
+            if (rows == null)
+                return out;
             for (Map<String, Object> row : rows) {
                 Map<String, Object> m = new HashMap<>();
                 Object pid = row.getOrDefault("product_id", row.get("productId"));
@@ -338,11 +371,15 @@ public class ReviewService {
      * Check whether a user can review a product.
      */
     public boolean canUserReview(int userId, int productId) {
-        if (userId <= 0 || productId <= 0) return false;
+        if (userId <= 0 || productId <= 0)
+            return false;
         try {
-            if (reviewDAO.userHasReviewed(userId, productId)) return false;
-            if (userDAO.findById(userId) == null) return false;
-            if (productDAO.findById(productId) == null) return false;
+            if (reviewDAO.userHasReviewed(userId, productId))
+                return false;
+            if (userDAO.findById(userId) == null)
+                return false;
+            if (productDAO.findById(productId) == null)
+                return false;
 
             // optional: require a purchase to review
             if (orderItemDAO != null) {
@@ -352,7 +389,8 @@ public class ReviewService {
                         OrderDAO orderDAO = new OrderDAO();
                         for (OrderItem oi : items) {
                             Order o = orderDAO.findById(oi.getOrderId());
-                            if (o != null && o.getUserId() == userId) return true;
+                            if (o != null && o.getUserId() == userId)
+                                return true;
                         }
                     }
                     // no purchase found
@@ -376,12 +414,14 @@ public class ReviewService {
     }
 
     private boolean isValidTitle(String title) {
-        if (title == null) return true; // title optional
+        if (title == null)
+            return true; // title optional
         return title.length() <= 200;
     }
 
     private boolean isValidComment(String comment) {
-        if (comment == null) return true;
+        if (comment == null)
+            return true;
         return comment.length() <= 2000;
     }
 }

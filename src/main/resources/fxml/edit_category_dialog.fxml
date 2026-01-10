@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.shopjoy.controller.EditCategoryDialogController"
+      spacing="15"
+      stylesheets="@../css/styles.css"
+      style="-fx-background-color: white; -fx-padding: 20;"
+      prefWidth="400">
+
+    <Label text="Edit Category" styleClass="page-title"/>
+
+    <Label fx:id="messageLabel" text="" wrapText="true"/>
+
+    <VBox spacing="5">
+        <Label text="Category ID"/>
+        <TextField fx:id="categoryIdField" editable="false" style="-fx-background-color: #f0f0f0;"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Category Name *"/>
+        <TextField fx:id="categoryNameField" promptText="Enter category name"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Description"/>
+        <TextArea fx:id="descriptionArea" prefRowCount="3" wrapText="true" promptText="Enter description"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Parent Category"/>
+        <ComboBox fx:id="parentCategoryComboBox" maxWidth="Infinity" promptText="Select Parent Category"/>
+    </VBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" styleClass="secondary-button"/>
+        <Button fx:id="saveButton" text="Update Category" onAction="#handleSave" styleClass="primary-button"/>
+    </HBox>
+
+</VBox>
