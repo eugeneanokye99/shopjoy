@@ -1,6 +1,7 @@
 package com.shopjoy.service;
 
 import com.shopjoy.dao.CategoryDAO;
+import com.shopjoy.cache.CategoryCache;
 import com.shopjoy.dao.ProductDAO;
 import com.shopjoy.model.Category;
 
@@ -12,7 +13,8 @@ import java.util.List;
 /**
  * Service for category management and business rules.
  *
- * Category hierarchy logic: categories may reference a parent via `parentCategoryId`.
+ * Category hierarchy logic: categories may reference a parent via
+ * `parentCategoryId`.
  * Top-level categories have `parentCategoryId == null`. The service builds a
  * `CategoryTree` by retrieving top-level categories and recursively fetching
  * their subcategories via `CategoryDAO.findSubcategories()`.
@@ -20,6 +22,7 @@ import java.util.List;
 public class CategoryService {
     private final CategoryDAO categoryDAO;
     private final ProductDAO productDAO;
+    private final CategoryCache categoryCache = CategoryCache.getInstance();
 
     public CategoryService() {
         this.categoryDAO = new CategoryDAO();
@@ -30,8 +33,22 @@ public class CategoryService {
      * Return all categories.
      */
     public List<Category> getAllCategories() {
+        // Check cache first
+        if (categoryCache.isCacheValid() && categoryCache.getCacheSize() > 0) {
+            List<Category> cached = categoryCache.getAllCachedCategories();
+            if (cached != null) {
+                System.out.println("Returning categories from cache");
+                return cached;
+            }
+        }
+
         try {
-            return categoryDAO.findAll();
+            List<Category> categories = categoryDAO.findAll();
+            if (categories != null) {
+                categoryCache.cacheCategoryList(categories);
+                System.out.println("Categories loaded from database and cached");
+            }
+            return categories;
         } catch (SQLException e) {
             System.err.println("getAllCategories: " + e.getMessage());
             return new ArrayList<>();
@@ -42,9 +59,22 @@ public class CategoryService {
      * Get category by id, or null if invalid/not found.
      */
     public Category getCategoryById(int categoryId) {
-        if (categoryId <= 0) return null;
+        if (categoryId <= 0)
+            return null;
+        // Check cache first
+        Category cached = categoryCache.getCategory(categoryId);
+        if (cached != null) {
+            System.out.println("Category " + categoryId + " retrieved from cache");
+            return cached;
+        }
+
         try {
-            return categoryDAO.findById(categoryId);
+            Category category = categoryDAO.findById(categoryId);
+            if (category != null) {
+                categoryCache.cacheCategory(category);
+                System.out.println("Category " + categoryId + " loaded from database and cached");
+            }
+            return category;
         } catch (SQLException e) {
             System.err.println("getCategoryById: " + e.getMessage());
             return null;
@@ -55,7 +85,8 @@ public class CategoryService {
      * Get category by exact name.
      */
     public Category getCategoryByName(String categoryName) {
-        if (categoryName == null || categoryName.trim().isEmpty()) return null;
+        if (categoryName == null || categoryName.trim().isEmpty())
+            return null;
         try {
             return categoryDAO.findByName(categoryName.trim());
         } catch (SQLException e) {
@@ -68,8 +99,20 @@ public class CategoryService {
      * Return top-level categories (no parent).
      */
     public List<Category> getTopLevelCategories() {
+        // Check cache first
+        List<Category> cached = categoryCache.getTopLevelCategories();
+        if (cached != null) {
+            System.out.println("Top-level categories retrieved from cache");
+            return cached;
+        }
+
         try {
-            return categoryDAO.findTopLevelCategories();
+            List<Category> categories = categoryDAO.findTopLevelCategories();
+            if (categories != null) {
+                categoryCache.cacheTopLevelCategories(categories);
+                System.out.println("Top-level categories loaded from database and cached");
+            }
+            return categories;
         } catch (SQLException e) {
             System.err.println("getTopLevelCategories: " + e.getMessage());
             return new ArrayList<>();
@@ -80,9 +123,23 @@ public class CategoryService {
      * Get direct subcategories of a parent category.
      */
     public List<Category> getSubcategories(int parentCategoryId) {
-        if (parentCategoryId <= 0) return new ArrayList<>();
+        if (parentCategoryId <= 0)
+            return new ArrayList<>();
+        // Check cache first
+        List<Category> cached = categoryCache.getSubcategories(parentCategoryId);
+        if (cached != null) {
+            System.out.println("Subcategories for category " + parentCategoryId + " retrieved from cache");
+            return cached;
+        }
+
         try {
-            return categoryDAO.findSubcategories(parentCategoryId);
+            List<Category> subs = categoryDAO.findSubcategories(parentCategoryId);
+            if (subs != null) {
+                categoryCache.cacheSubcategories(parentCategoryId, subs);
+                System.out
+                        .println("Subcategories for category " + parentCategoryId + " loaded from database and cached");
+            }
+            return subs;
         } catch (SQLException e) {
             System.err.println("getSubcategories: " + e.getMessage());
             return new ArrayList<>();
@@ -105,7 +162,8 @@ public class CategoryService {
         try {
             // name must be unique
             Category existing = categoryDAO.findByName(name);
-            if (existing != null) return null;
+            if (existing != null)
+                return null;
 
             // if parent specified, validate it exists
             if (parentCategoryId != null) {
@@ -123,7 +181,12 @@ public class CategoryService {
             c.setCreatedAt(LocalDateTime.now());
 
             try {
-                return categoryDAO.save(c);
+                Category saved = categoryDAO.save(c);
+                if (saved != null) {
+                    categoryCache.invalidateCache();
+                    System.out.println("Category cache invalidated after adding new category");
+                }
+                return saved;
             } catch (SQLException e) {
                 System.err.println("addCategory: save error: " + e.getMessage());
                 return null;
@@ -138,13 +201,17 @@ public class CategoryService {
      * Update an existing category. Returns updated or null.
      */
     public Category updateCategory(Category category) {
-        if (category == null || category.getCategoryId() <= 0) return null;
-        if (category.getCategoryName() == null || category.getCategoryName().trim().isEmpty()) return null;
+        if (category == null || category.getCategoryId() <= 0)
+            return null;
+        if (category.getCategoryName() == null || category.getCategoryName().trim().isEmpty())
+            return null;
         String name = category.getCategoryName().trim();
-        if (name.length() > 100) return null;
+        if (name.length() > 100)
+            return null;
         try {
             Category existing = categoryDAO.findById(category.getCategoryId());
-            if (existing == null) return null;
+            if (existing == null)
+                return null;
 
             Category byName = categoryDAO.findByName(name);
             if (byName != null && byName.getCategoryId() != category.getCategoryId()) {
@@ -154,7 +221,12 @@ public class CategoryService {
 
             try {
                 category.setCategoryName(name);
-                return categoryDAO.update(category);
+                Category updated = categoryDAO.update(category);
+                if (updated != null) {
+                    categoryCache.invalidateCategory(category.getCategoryId());
+                    System.out.println("Cache invalidated for category " + category.getCategoryId());
+                }
+                return updated;
             } catch (SQLException e) {
                 System.err.println("updateCategory: update error: " + e.getMessage());
                 return null;
@@ -169,17 +241,25 @@ public class CategoryService {
      * Delete a category if it has no products or subcategories.
      */
     public boolean deleteCategory(int categoryId) {
-        if (categoryId <= 0) return false;
+        if (categoryId <= 0)
+            return false;
         try {
             // cannot delete if products exist
-            if (categoryDAO.hasProducts(categoryId)) return false;
+            if (categoryDAO.hasProducts(categoryId))
+                return false;
 
             // cannot delete if subcategories exist
             List<Category> subs = categoryDAO.findSubcategories(categoryId);
-            if (subs != null && !subs.isEmpty()) return false;
+            if (subs != null && !subs.isEmpty())
+                return false;
 
             try {
-                return categoryDAO.delete(categoryId);
+                boolean success = categoryDAO.delete(categoryId);
+                if (success) {
+                    categoryCache.invalidateCache();
+                    System.out.println("Category cache invalidated after deletion");
+                }
+                return success;
             } catch (SQLException e) {
                 System.err.println("deleteCategory: delete error: " + e.getMessage());
                 return false;
@@ -194,7 +274,8 @@ public class CategoryService {
      * Return count of products in a category.
      */
     public int getProductCount(int categoryId) {
-        if (categoryId <= 0) return 0;
+        if (categoryId <= 0)
+            return 0;
         try {
             return categoryDAO.getProductCount(categoryId);
         } catch (SQLException e) {
@@ -219,7 +300,8 @@ public class CategoryService {
      * Check whether category has subcategories.
      */
     public boolean hasSubcategories(int categoryId) {
-        if (categoryId <= 0) return false;
+        if (categoryId <= 0)
+            return false;
         try {
             List<Category> subs = categoryDAO.findSubcategories(categoryId);
             return subs != null && !subs.isEmpty();
@@ -236,7 +318,8 @@ public class CategoryService {
         List<CategoryTree> roots = new ArrayList<>();
         try {
             List<Category> top = categoryDAO.findTopLevelCategories();
-            if (top == null) return roots;
+            if (top == null)
+                return roots;
             for (Category c : top) {
                 CategoryTree node = buildTreeRecursive(c);
                 roots.add(node);
@@ -254,13 +337,13 @@ public class CategoryService {
     private CategoryTree buildTreeRecursive(Category category) {
         CategoryTree node = new CategoryTree(category);
         try {
-            List<Category> children = categoryDAO.findSubcategories(category.getCategoryId());
+            List<Category> children = getSubcategories(category.getCategoryId());
             if (children != null) {
                 for (Category child : children) {
                     node.addChild(buildTreeRecursive(child));
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.err.println("buildTreeRecursive: " + e.getMessage());
         }
         return node;
