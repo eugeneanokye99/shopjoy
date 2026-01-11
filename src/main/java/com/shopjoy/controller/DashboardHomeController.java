@@ -49,6 +49,9 @@ public class DashboardHomeController {
     @FXML
     private Label avgRatingLabel;
 
+    @FXML
+    private Label cacheHitRateLabel;
+
     // Recent orders table
     @FXML
     private TableView<Order> recentOrdersTable;
@@ -83,6 +86,7 @@ public class DashboardHomeController {
         setupRecentOrdersTable();
         loadStatistics();
         loadRecentOrders();
+        loadCacheStatistics();
         startAutoRefresh();
     }
 
@@ -180,6 +184,32 @@ public class DashboardHomeController {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error loading statistics: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Load and display cache performance statistics
+     */
+    private void loadCacheStatistics() {
+        try {
+            com.shopjoy.cache.ProductCache productCache = com.shopjoy.cache.ProductCache.getInstance();
+            boolean cacheValid = productCache.isCacheValid();
+            int cacheSize = productCache.getCacheSize();
+
+            if (cacheHitRateLabel != null) {
+                if (cacheValid && cacheSize > 0) {
+                    cacheHitRateLabel.setText("Active (" + cacheSize + ")");
+                    cacheHitRateLabel.setStyle("-fx-text-fill: #10b981;"); // Emerald green
+                } else if (!cacheValid) {
+                    cacheHitRateLabel.setText("Refreshing...");
+                    cacheHitRateLabel.setStyle("-fx-text-fill: #f59e0b;"); // Amber
+                } else {
+                    cacheHitRateLabel.setText("Empty");
+                    cacheHitRateLabel.setStyle("-fx-text-fill: #6b7280;"); // Gray
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading cache statistics: " + e.getMessage());
         }
     }
 

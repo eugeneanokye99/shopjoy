@@ -256,6 +256,7 @@ public class EditProductDialogController {
             currentProduct.setDescription(description.isEmpty() ? null : description);
             currentProduct.setCategoryId(selectedCategory.getCategoryId());
             currentProduct.setPrice(price);
+            currentProduct.setCostPrice(costPrice);
             currentProduct.setSku(sku);
             currentProduct.setBrand(brand.isEmpty() ? null : brand);
             currentProduct.setImageUrl(imageUrl.isEmpty() ? null : imageUrl);
@@ -263,9 +264,9 @@ public class EditProductDialogController {
             currentProduct.setUpdatedAt(LocalDateTime.now());
 
             // Update product in database
-            boolean updated = productService.updateProduct(currentProduct);
+            Product updatedProduct = productService.updateProduct(currentProduct);
 
-            if (!updated) {
+            if (updatedProduct == null) {
                 showMessage("Failed to update product. SKU may already exist.", true);
                 return;
             }

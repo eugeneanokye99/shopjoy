@@ -64,7 +64,6 @@ public class CategoryService {
         // Check cache first
         Category cached = categoryCache.getCategory(categoryId);
         if (cached != null) {
-            System.out.println("Category " + categoryId + " retrieved from cache");
             return cached;
         }
 

@@ -1,6 +1,5 @@
 package com.shopjoy.controller;
 
-import com.shopjoy.service.CartService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

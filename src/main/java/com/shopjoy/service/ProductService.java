@@ -66,7 +66,6 @@ public class ProductService {
         // Check cache first
         Product cached = productCache.getProduct(productId);
         if (cached != null) {
-            System.out.println("Product " + productId + " retrieved from cache");
             return cached;
         }
 
@@ -202,30 +201,30 @@ public class ProductService {
         }
     }
 
-    public boolean updateProduct(Product product) {
+    public Product updateProduct(Product product) {
         if (product == null || product.getProductId() <= 0) {
             System.err.println("updateProduct: invalid product");
-            return false;
+            return null;
         }
         if (!validateProductFields(product))
-            return false;
+            return null;
         try {
             Product existing = productDAO.findById(product.getProductId());
             if (existing == null) {
                 System.err.println("updateProduct: product not found");
-                return false;
+                return null;
             }
             Product updated = productDAO.update(product);
             if (updated != null) {
                 // Invalidate specific product in cache
                 productCache.invalidateProduct(product.getProductId());
                 System.out.println("Cache invalidated for product " + product.getProductId());
-                return true;
+                return updated;
             }
-            return false;
+            return null;
         } catch (SQLException e) {
             System.err.println("updateProduct SQLException: " + e.getMessage());
-            return false;
+            return null;
         }
     }
 
