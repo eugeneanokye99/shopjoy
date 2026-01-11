@@ -97,29 +97,19 @@ mvn javafx:run
 - Password: `password123`
 
 ## Project Structure
-shopjoy/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/shopjoy/
-│   │   │       ├── model/          # Entity classes
-│   │   │       ├── dao/            # Data Access Objects
-│   │   │       ├── service/        # Business logic
-│   │   │       ├── controller/     # JavaFX controllers
-│   │   │       ├── util/           # Utility classes
-│   │   │       ├── cache/          # Caching implementation
-│   │   │       └── ShopJoyApp.java # Main application
-│   │   └── resources/
-│   │       ├── fxml/               # FXML view files
-│   │       ├── css/                # Stylesheets
-│   │       └── application.properties
-│   └── test/
-│       └── java/com/shopjoy/test/  # Test classes
-├── sql/
-│   ├── create_tables.sql          # Database schema
-│   └── test_data.sql              # Sample data
-├── pom.xml                        # Maven configuration
-└── README.md                      # This file
+
+| Component / Directory | Description |
+| :--- | :--- |
+| **`com.shopjoy.model`** | Core entity classes (User, Product, Order, etc.) |
+| **`com.shopjoy.dao`** | Data Access Objects for raw SQL interactions |
+| **`com.shopjoy.service`** | Business logic layer (authentication, order processing) |
+| **`com.shopjoy.controller`** | JavaFX controllers for UI event handling |
+| **`com.shopjoy.cache`** | Thread-safe in-memory caching implementation |
+| **`com.shopjoy.util`** | AppConfig, Logger, and ExceptionHandler utilities |
+| **`src/main/resources/fxml`** | UI layout definitions for Admin and Customer views |
+| **`src/main/resources/css`** | Styling, color palettes, and design tokens |
+| **`sql/`** | Database schema scripts and sampled test data |
+| **`pom.xml`** | Maven dependency and build configuration |
 
 ## Database Schema
 
@@ -215,9 +205,9 @@ java com.shopjoy.test.PerformanceTest
 This project is licensed under the MIT License - see LICENSE file for details.
 
 ## Author
-**Your Name**
-- Email: your.email@example.com
-- GitHub: [@yourusername](https://github.com/yourusername)
+**Eugene Anokye**
+- Email: [yawanokye99@gail.com](mailto:yawanokye99@gail.com)
+- GitHub: [@eugeneanokye99](https://github.com/eugeneanokye99)
 
 ## Acknowledgments
 - JavaFX community for excellent documentation
