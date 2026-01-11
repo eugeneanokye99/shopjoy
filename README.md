@@ -1,5 +1,7 @@
 # ShopJoy E-Commerce Management System
 
+![Build Status](https://github.com/eugeneanokye99/shopjoy/actions/workflows/maven.yml/badge.svg)
+
 ## Project Overview
 ShopJoy is a comprehensive e-commerce management system built with JavaFX and PostgreSQL. It provides both admin and customer interfaces for managing products, orders, inventory, and customer relationships.
 
